@@ -5,18 +5,39 @@
   "scripts": {
     "start": "react-native start",
     "test": "jest",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "update-schema": "get-graphql-schema http://localhost:5000/graphql > src/schema.graphql",
+    "relay": "./node_modules/.bin/relay-compiler --src ./src/ --schema ./src/schema.graphql",
+    "redirectports": "sh ./scripts/redirect_ports.sh"
   },
   "dependencies": {
+    "babel-plugin-relay": "^5.0.0",
+    "fbjs": "^1.0.0",
+    "formik": "^1.5.8",
+    "graphql": "^14.4.2",
     "react": "16.8.6",
-    "react-native": "0.60.4"
+    "react-native": "0.60.4",
+    "react-native-dotenv": "^0.2.0",
+    "react-relay": "^5.0.0",
+    "relay-compiler": "^5.0.0",
+    "relay-devtools": "^1.4.0",
+    "relay-runtime": "^5.0.0",
+    "styled-components": "^4.3.2",
+    "subscriptions-transport-ws": "^0.9.16",
+    "yup": "^0.27.0"
   },
   "devDependencies": {
     "@babel/core": "^7.5.5",
     "@babel/runtime": "^7.5.5",
     "@react-native-community/eslint-config": "^0.0.5",
     "babel-jest": "^24.8.0",
-    "eslint": "^6.1.0",
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb": "^17.1.1",
+    "eslint-config-prettier": "^6.0.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-prettier": "^3.1.0",
+    "eslint-plugin-react": "^7.14.3",
     "jest": "^24.8.0",
     "metro-react-native-babel-preset": "^0.55.0",
     "react-test-renderer": "16.8.6"
