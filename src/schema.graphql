@@ -1,0 +1,173 @@
+type Mutation {
+  UserLoginMutation(input: UserLoginInput!): UserLoginPayload
+  UserAddMutation(input: UserAddInput!): UserAddPayload
+  ProductAddMutation(input: ProductAddInput!): ProductAddPayload
+  ProductEditMutation(input: ProductEditInput!): ProductEditPayload
+}
+
+# An object with an ID
+interface Node {
+  # The id of the object.
+  id: ID!
+}
+
+# Information about pagination in a connection.
+type PageInfo {
+  # When paginating forwards, are there more items?
+  hasNextPage: Boolean!
+
+  # When paginating backwards, are there more items?
+  hasPreviousPage: Boolean!
+
+  # When paginating backwards, the cursor to continue.
+  startCursor: String
+
+  # When paginating forwards, the cursor to continue.
+  endCursor: String
+}
+
+# Product type definition
+type Product implements Node {
+  # The ID of an object
+  id: ID!
+  _id: String!
+
+  # Title of the product
+  title: String
+
+  # Title of the product
+  description: String
+
+  # Active of the product
+  active: Boolean
+}
+
+input ProductAddInput {
+  title: String!
+  description: String!
+  active: Boolean
+  clientMutationId: String
+}
+
+type ProductAddPayload {
+  productEdge: ProductEdge
+  error: String
+  clientMutationId: String
+}
+
+# A connection to a list of items.
+type ProductConnection {
+  # Information to aid in pagination.
+  pageInfo: PageInfo!
+
+  # A list of edges.
+  edges: [ProductEdge]
+}
+
+# An edge in a connection.
+type ProductEdge {
+  # The item at the end of the edge
+  node: Product
+
+  # A cursor for use in pagination
+  cursor: String!
+}
+
+input ProductEditInput {
+  id: ID!
+  title: String!
+  description: String!
+  active: Boolean
+  clientMutationId: String
+}
+
+type ProductEditPayload {
+  product: Product
+  error: String
+  clientMutationId: String
+}
+
+# The root of all... queries
+type Query {
+  # Fetches an object given its ID
+  node(
+    # The ID of an object
+    id: ID!
+  ): Node
+
+  # Me is the logged user
+  me: User
+  users(after: String, first: Int, before: String, last: Int, search: String): UserConnection!
+
+  # Product by id
+  product(id: ID!): Product
+
+  # Search products by title
+  products(after: String, first: Int, before: String, last: Int, search: String): ProductConnection
+}
+
+# User type definition
+type User implements Node {
+  # ID of the user
+  id: ID!
+
+  # Name of the user
+  name: String
+
+  # Password of the user
+  password: String
+
+  # Email of the user
+  email: String
+
+  # Active of the user
+  active: Boolean
+
+  # isAdmin of the user
+  isAdmin: Boolean
+}
+
+input UserAddInput {
+  name: String!
+  password: String
+  email: String!
+  active: Boolean
+  clientMutationId: String
+}
+
+type UserAddPayload {
+  user: User
+  error: String
+  clientMutationId: String
+}
+
+# A connection to a list of items.
+type UserConnection {
+  # Information to aid in pagination.
+  pageInfo: PageInfo!
+
+  # A list of edges.
+  edges: [UserEdge]
+}
+
+# An edge in a connection.
+type UserEdge {
+  # The item at the end of the edge
+  node: User!
+
+  # A cursor for use in pagination
+  cursor: String!
+}
+
+input UserLoginInput {
+  email: String!
+  password: String!
+  clientMutationId: String
+}
+
+type UserLoginPayload {
+  token: String
+  error: String
+  clientMutationId: String
+}
+
