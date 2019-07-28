@@ -1,40 +1,66 @@
 import React, { useState } from 'react';
-import { Container, Header, Content } from 'native-base';
+import {
+  Container,
+  Header,
+  Content,
+  Item,
+  Icon,
+  Input,
+  Button,
+  Text,
+} from 'native-base';
 import { graphql, createRefetchContainer } from 'react-relay';
+import styled from 'styled-components/native';
 
 import createQueryRenderer from '../../relay/createQueryRenderer';
 
 import FlatListCustom from '../../components/flatlist/FlatListCustom';
 
+const ContentStyled = styled(Content)`
+  background-color: #1d3557;
+`;
+
+const HeaderStyled = styled(Header)`
+  padding: 5px;
+`;
+
 const TOTAL_REFETCH_ITEMS = 10;
-
-// const handleSearch = text => {
-//   const refetchVariables = fragmentVariables => ({
-//     ...fragmentVariables,
-//     name: text,
-//   });
-//   const { relay } = this.props;
-
-//   relay.refetch(refetchVariables, null, () => {}, {
-//     force: true,
-//   });
-
-//   this.setState({ search: text });
-// };
-
-// const renderHeader = () => (
-//   <SearchBarWithInput
-//     onChangeText={text => handleSearch(text)}
-//     value={this.state.search}
-//     placeholder="Search..."
-//     showAction
-//     action={() => navigation.navigate('GroupAdd')}
-//   />
-// );
 
 const ListProducts = ({ query, relay }) => {
   const [isFetchingTop, setIsFetchingTop] = useState(false);
   const [isFetchingEnd, setIsFetchingEnd] = useState(false);
+  const [search, setSearch] = useState('');
+
+  const handleSearch = () => {
+    const refetchVariables = fragmentVariables => ({
+      ...fragmentVariables,
+      search,
+    });
+    relay.refetch(refetchVariables, null, () => {}, {
+      force: true,
+    });
+
+    setSearch(search);
+  };
+
+  const renderHeader = () => (
+    <HeaderStyled searchBar rounded>
+      <Item>
+        <Icon name="ios-search" />
+        <Input
+          key="search"
+          name="search"
+          onChangeText={setSearch}
+          value={search}
+          placeholder="Search"
+        />
+        <Icon name="ios-people" />
+      </Item>
+      <Button transparent onPress={handleSearch}>
+        <Text>Search</Text>
+      </Button>
+    </HeaderStyled>
+  );
 
   const onRefresh = () => {
     if (isFetchingTop) return;
@@ -93,8 +119,7 @@ const ListProducts = ({ query, relay }) => {
 
   return (
     <Container>
-      <Header />
-      <Content>
+      <ContentStyled>
         {query.products && query.products.edges && (
           <FlatListCustom
             onEndReached={onEndReached}
@@ -104,10 +129,10 @@ const ListProducts = ({ query, relay }) => {
             // onItemClick={({ id }) => {
             //   navigation.navigate('GroupDetails', { id });
             // }}
-            // ListHeaderComponent={renderHeader}
+            ListHeaderComponent={renderHeader}
           />
         )}
-      </Content>
+      </ContentStyled>
     </Container>
   );
 };

@@ -4,52 +4,47 @@ import { View } from 'react-native';
 import Swipeout from 'react-native-swipeout';
 
 const ButtonStyled = styled.TouchableOpacity`
-  background-color: #f6f7f8;
+  background-color: #457b9d;
   justify-content: center;
   height: 60px;
   padding: 0 15px;
-  border-top-color: #fff;
+  border-top-color: #5587a5;
   border-top-width: 1px;
   border-bottom-width: 1px;
-  border-bottom-color: #eceef3;
+  border-bottom-color: #3f708f;
 `;
 
 const ItemTitle = styled.Text`
-  color: #7c828e;
+  color: #f1faee;
 `;
 
 const ItemDescription = styled.Text`
-  color: #9fa7b6;
+  color: #f1faee;
 `;
 
-class ListItem extends React.PureComponent {
-  _onPress = () => {
-    const { id, onPressItem } = this.props;
+const ListItem = ({ id, onPressItem, title, children, swipeOutOptions }) => {
+  const onPress = () => {
     onPressItem(id);
   };
 
-  render() {
-    const { title, children, swipeOutOptions } = this.props;
-
-    const swipeProps = {
-      backgroundColor: '#fdfffc',
-      autoClose: true,
-      right: swipeOutOptions,
-    };
-    return (
-      <Swipeout {...swipeProps}>
-        <ButtonStyled onPress={this._onPress}>
-          {title && (
-            <View>
-              <ItemTitle>{title}</ItemTitle>
-              <ItemDescription>Descrição</ItemDescription>
-            </View>
-          )}
-          {children}
-        </ButtonStyled>
-      </Swipeout>
-    );
-  }
-}
+  const swipeProps = {
+    backgroundColor: '#fdfffc',
+    autoClose: true,
+    right: swipeOutOptions,
+  };
+  return (
+    <Swipeout {...swipeProps}>
+      <ButtonStyled onPress={onPress}>
+        {title && (
+          <View>
+            <ItemTitle>{title}</ItemTitle>
+            <ItemDescription>Descrição</ItemDescription>
+          </View>
+        )}
+        {children}
+      </ButtonStyled>
+    </Swipeout>
+  );
+};
 
 export default ListItem;
