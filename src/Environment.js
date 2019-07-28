@@ -13,7 +13,7 @@ import { getToken } from './security/authentication';
 const setupSubscription = (config, variables, cacheConfig, observer) => {
   const query = config.text;
   const subscriptionClient = new SubscriptionClient(GRAPHQL_WS_URL, {
-    reconnect: true
+    reconnect: true,
   });
 
   const onNext = result => {
@@ -37,7 +37,7 @@ const setupSubscription = (config, variables, cacheConfig, observer) => {
       // unsubscribe and close this socket connection
       client.unsubscribe();
       subscriptionClient.close();
-    }
+    },
   };
 };
 
@@ -48,25 +48,25 @@ async function fetchQuery(operation, variables) {
 
   const headers = {
     Authorization: token,
-    query: operation.name
+    query: operation.name,
   };
 
   const options = {
     fetchTimeout: 30000,
-    retryDelays: [1000, 3000, 5000, 10000]
+    retryDelays: [1000, 3000, 5000, 10000],
   };
 
   const response = await fetchWithRetries(GRAPHQL_URL, {
     method: 'POST',
     headers: {
       'content-type': 'application/json',
-      ...headers
+      ...headers,
     },
     body: JSON.stringify({
       query: operation.text, // GraphQL text from input
-      variables
+      variables,
     }),
-    ...options
+    ...options,
   });
 
   return response.json();
@@ -95,7 +95,7 @@ installRelayDevTools();
 const environment = new Environment({
   handlerProvider, // Can omit.
   network,
-  store
+  store,
 });
 
 export default environment;
