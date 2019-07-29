@@ -47,7 +47,10 @@ const createProductForm = withFormik({
     title: yup.string().required('Preencha o campo Title'),
     description: yup.string().required('Preencha o campo Description'),
   }),
-  handleSubmit: async (values, { props: { navigation }, setSubmitting }) => {
+  handleSubmit: async (
+    values,
+    { props: { navigation }, setSubmitting, resetForm }
+  ) => {
     const onCompleted = res => {
       setSubmitting(false);
       const response =
@@ -57,6 +60,8 @@ const createProductForm = withFormik({
       if (response && response.error) {
         Alert.alert('Erro', 'Falha na operação');
       }
+      resetForm({});
+      navigation.navigate('ListProducts');
     };
 
     const onError = () => {

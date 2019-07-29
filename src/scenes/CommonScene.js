@@ -1,41 +1,49 @@
 import React from 'react';
-import {
-  Container,
-  Content,
-  Header,
-  Left,
-  Body,
-  Right,
-  Button,
-  Icon,
-  Title,
-} from 'native-base';
+import { Button, Icon } from 'native-base';
+import { SafeAreaView } from 'react-native';
 import styled from 'styled-components/native';
 
-const ContentStyled = styled(Content)`
+const SafeAreaViewStyled = styled(SafeAreaView)`
+  flex: 1;
+`;
+
+const Container = styled.View`
+  flex: 1;
+  justify-content: flex-start;
+  background-color: #22211f;
+`;
+
+const Content = styled.View`
+  flex: 1;
+  justify-content: flex-start;
+`;
+
+const Header = styled.View`
+  flex: 1;
+  max-height: 50px;
   background-color: #1d3557;
+  justify-content: space-between;
+  flex-direction: row;
 `;
 
 const CommonScene = ({ children, navigation }) => {
   return (
-    <Container>
-      <Header>
-        <Left>
-          <Button transparent>
-            <Icon name="arrow-back" />
-          </Button>
-        </Left>
-        <Body>
-          <Title>Header</Title>
-        </Body>
-        <Right>
+    <SafeAreaViewStyled>
+      <Container>
+        <Header>
+          {navigation.state.routeName !== 'ListProducts' && (
+            <Button transparent onPress={() => navigation.goBack()}>
+              <Icon name="arrow-back" />
+            </Button>
+          )}
+          {/* <Title>Header</Title> */}
           <Button transparent onPress={() => navigation.openDrawer()}>
             <Icon name="menu" />
           </Button>
-        </Right>
-      </Header>
-      <ContentStyled>{children}</ContentStyled>
-    </Container>
+        </Header>
+        <Content>{children}</Content>
+      </Container>
+    </SafeAreaViewStyled>
   );
 };
 

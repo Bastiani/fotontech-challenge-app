@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
-import { Header, Item, Icon, Button, Text } from 'native-base';
-import { TextInput, Alert } from 'react-native';
+import { Alert } from 'react-native';
 import { graphql, createRefetchContainer } from 'react-relay';
-import styled from 'styled-components/native';
 
 import createQueryRenderer from '../../relay/createQueryRenderer';
 
@@ -10,47 +8,19 @@ import FlatListCustom from '../../components/flatlist/FlatListCustom';
 
 import CommonScene from '../CommonScene';
 
-import ProductEditMutation from './mutations/ProductEditMutation';
+import SearchBar from '../../components/search/SearchBar';
 
-const HeaderStyled = styled(Header)`
-  padding: 5px;
-`;
+import ProductEditMutation from './mutations/ProductEditMutation';
 
 const TOTAL_REFETCH_ITEMS = 10;
 
-const InputSearch = ({ search, setSearch }) => (
-  <TextInput
-    key="search"
-    name="search"
-    onChangeText={setSearch}
-    value={search}
-    // autoFocus={true}
-    placeholder="Search"
-  />
-);
+const renderHeader = handleSearch => <SearchBar handleSearch={handleSearch} />;
 
 const ListProducts = ({ navigation, query, relay }) => {
   const [isFetchingTop, setIsFetchingTop] = useState(false);
   const [isFetchingEnd, setIsFetchingEnd] = useState(false);
-  const [search, setSearch] = useState('');
-
-  const onCompleted = res => {
-    const response = res && res.ProductEditMutation;
-    Alert.alert('Success', 'Operação realizada com sucesso!');
-
-    if (response && response.error) {
-      Alert.alert('Erro', 'Falha na operação');
-    }
-    onRefresh();
-  };
-
-  const onError = () => {
-    Alert.alert('Erro', 'Falha na operação');
-  };
 
   const onRefresh = () => {
-    console.log('======= onRefresh isFetchingTop', isFetchingTop);
-
     if (isFetchingTop) return;
 
     setIsFetchingTop(true);
@@ -69,6 +39,20 @@ const ListProducts = ({ navigation, query, relay }) => {
         force: true,
       }
     );
+  };
+
+  const onCompleted = res => {
+    const response = res && res.ProductEditMutation;
+    Alert.alert('Success', 'Operação realizada com sucesso!');
+
+    if (response && response.error) {
+      Alert.alert('Erro', 'Falha na operação');
+    }
+    onRefresh();
+  };
+
+  const onError = () => {
+    Alert.alert('Erro', 'Falha na operação');
   };
 
   const swipeOutOptions = node => {
@@ -100,7 +84,7 @@ const ListProducts = ({ navigation, query, relay }) => {
     ];
   };
 
-  const handleSearch = () => {
+  const handleSearch = search => {
     const refetchVariables = fragmentVariables => ({
       ...fragmentVariables,
       search,
@@ -108,22 +92,7 @@ const ListProducts = ({ navigation, query, relay }) => {
     relay.refetch(refetchVariables, null, () => {}, {
       force: true,
     });
-
-    setSearch(search);
   };
-
-  const renderHeader = () => (
-    <HeaderStyled searchBar rounded>
-      <Item>
-        <Icon name="ios-search" />
-        <InputSearch search={search} setSearch={setSearch} />
-        <Icon name="ios-people" />
-      </Item>
-      <Button transparent onPress={handleSearch}>
-        <Text>Search</Text>
-      </Button>
-    </HeaderStyled>
-  );
 
   const onEndReached = () => {
     if (isFetchingEnd) return;
@@ -170,7 +139,7 @@ const ListProducts = ({ navigation, query, relay }) => {
           onItemClick={({ id }) => {
             navigation.navigate('EditProduct', { id });
           }}
-          ListHeaderComponent={renderHeader}
+          ListHeaderComponent={() => renderHeader(handleSearch)}
           swipeOutOptions={swipeOutOptions}
         />
       )}
