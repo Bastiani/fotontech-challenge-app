@@ -22,7 +22,14 @@ const ItemDescription = styled.Text`
   color: #f1faee;
 `;
 
-const ListItem = ({ id, onPressItem, title, children, swipeOutOptions }) => {
+const ListItem = ({
+  id,
+  onPressItem,
+  title,
+  description,
+  children,
+  swipeOutOptions,
+}) => {
   const onPress = () => {
     onPressItem(id);
   };
@@ -38,7 +45,7 @@ const ListItem = ({ id, onPressItem, title, children, swipeOutOptions }) => {
         {title && (
           <View>
             <ItemTitle>{title}</ItemTitle>
-            <ItemDescription>Descrição</ItemDescription>
+            <ItemDescription>{description}</ItemDescription>
           </View>
         )}
         {children}

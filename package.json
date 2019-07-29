@@ -16,6 +16,8 @@
     "formik": "^1.5.8",
     "graphql": "^14.4.2",
     "idx": "^2.5.6",
+    "lodash": "^4.17.15",
+    "lodash.get": "^4.4.2",
     "native-base": "^2.13.4",
     "react": "16.8.6",
     "react-native": "0.60.4",

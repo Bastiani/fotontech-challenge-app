@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 0280f6594686d8cbc69b0e15792a6400
+ * @relayHash a5baf993bec29d4b76b78b4dec289b9e
  */
 
 /* eslint-disable */
@@ -42,6 +42,7 @@ fragment ListProducts_query_1UbRgV on Query {
       node {
         id
         title
+        description
         __typename
       }
       cursor
@@ -167,6 +168,13 @@ return {
                   {
                     "kind": "ScalarField",
                     "alias": null,
+                    "name": "description",
+                    "args": null,
+                    "storageKey": null
+                  },
+                  {
+                    "kind": "ScalarField",
+                    "alias": null,
                     "name": "__typename",
                     "args": null,
                     "storageKey": null
@@ -199,7 +207,7 @@ return {
     "operationKind": "query",
     "name": "ListProductsRefetchQuery",
     "id": null,
-    "text": "query ListProductsRefetchQuery(\n  $first: Int\n  $search: String\n) {\n  ...ListProducts_query_1UbRgV\n}\n\nfragment ListProducts_query_1UbRgV on Query {\n  products(first: $first, search: $search) {\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n    edges {\n      node {\n        id\n        title\n        __typename\n      }\n      cursor\n    }\n  }\n}\n",
+    "text": "query ListProductsRefetchQuery(\n  $first: Int\n  $search: String\n) {\n  ...ListProducts_query_1UbRgV\n}\n\nfragment ListProducts_query_1UbRgV on Query {\n  products(first: $first, search: $search) {\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n    edges {\n      node {\n        id\n        title\n        description\n        __typename\n      }\n      cursor\n    }\n  }\n}\n",
     "metadata": {}
   }
 };

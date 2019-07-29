@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash bfb6bafd3e1f4f1e4e3681109bbc783e
+ * @relayHash 218e56620a87653cf816994d39a438a8
  */
 
 /* eslint-disable */
@@ -42,6 +42,7 @@ fragment ListProducts_query_1UbRgV on Query {
       node {
         id
         title
+        description
         __typename
       }
       cursor
@@ -167,6 +168,13 @@ return {
                   {
                     "kind": "ScalarField",
                     "alias": null,
+                    "name": "description",
+                    "args": null,
+                    "storageKey": null
+                  },
+                  {
+                    "kind": "ScalarField",
+                    "alias": null,
                     "name": "__typename",
                     "args": null,
                     "storageKey": null
@@ -199,7 +207,7 @@ return {
     "operationKind": "query",
     "name": "ListProductsQuery",
     "id": null,
-    "text": "query ListProductsQuery(\n  $first: Int\n  $search: String\n) {\n  ...ListProducts_query_1UbRgV\n}\n\nfragment ListProducts_query_1UbRgV on Query {\n  products(first: $first, search: $search) {\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n    edges {\n      node {\n        id\n        title\n        __typename\n      }\n      cursor\n    }\n  }\n}\n",
+    "text": "query ListProductsQuery(\n  $first: Int\n  $search: String\n) {\n  ...ListProducts_query_1UbRgV\n}\n\nfragment ListProducts_query_1UbRgV on Query {\n  products(first: $first, search: $search) {\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n    edges {\n      node {\n        id\n        title\n        description\n        __typename\n      }\n      cursor\n    }\n  }\n}\n",
     "metadata": {}
   }
 };

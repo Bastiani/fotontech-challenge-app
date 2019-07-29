@@ -21,6 +21,7 @@ export type ListProducts_query = {|
       +node: ?{|
         +id: string,
         +title: ?string,
+        +description: ?string,
       |}
     |}>,
   |},
@@ -134,6 +135,13 @@ const node/*: ReaderFragment*/ = {
                 {
                   "kind": "ScalarField",
                   "alias": null,
+                  "name": "description",
+                  "args": null,
+                  "storageKey": null
+                },
+                {
+                  "kind": "ScalarField",
+                  "alias": null,
                   "name": "__typename",
                   "args": null,
                   "storageKey": null
@@ -154,5 +162,5 @@ const node/*: ReaderFragment*/ = {
   ]
 };
 // prettier-ignore
-(node/*: any*/).hash = 'c0a0bf293722fb35f7924295b99662a4';
+(node/*: any*/).hash = '504f8d9315ff341e4e0435818e551d18';
 module.exports = node;

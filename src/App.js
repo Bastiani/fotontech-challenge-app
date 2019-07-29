@@ -1,9 +1,9 @@
 import React from 'react';
 import { createAppContainer } from 'react-navigation';
 
-import { StackNavigator } from './routes';
+import { DrawerNavigator } from './routes';
 
-const AppContainer = createAppContainer(StackNavigator);
+const AppContainer = createAppContainer(DrawerNavigator);
 
 const App = () => {
   return <AppContainer />;

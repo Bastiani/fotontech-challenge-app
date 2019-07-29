@@ -1,6 +1,8 @@
 import { ConnectionHandler } from 'relay-runtime';
 import { isObject, isArray } from 'lodash/fp';
 
+export const ROOT_ID = 'client:root';
+
 export function listRecordRemoveUpdater({
   parentId,
   itemId,
@@ -53,7 +55,7 @@ export function connectionUpdater({
 
     const conn = ConnectionHandler.getConnection(parentProxy, connectionName);
     // eslint-disable-next-line
-    if (!conn) return console.warn('The connection to update was not found.');
+    if (!conn) return console.warn("The connection to update was not found.");
 
     if (before) {
       ConnectionHandler.insertEdgeBefore(conn, edge);

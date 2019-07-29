@@ -1,14 +1,6 @@
 import React, { useState } from 'react';
-import {
-  Container,
-  Header,
-  Content,
-  Item,
-  Icon,
-  Input,
-  Button,
-  Text,
-} from 'native-base';
+import { Header, Item, Icon, Button, Text } from 'native-base';
+import { TextInput, Alert } from 'react-native';
 import { graphql, createRefetchContainer } from 'react-relay';
 import styled from 'styled-components/native';
 
@@ -16,9 +8,9 @@ import createQueryRenderer from '../../relay/createQueryRenderer';
 
 import FlatListCustom from '../../components/flatlist/FlatListCustom';
 
-const ContentStyled = styled(Content)`
-  background-color: #1d3557;
-`;
+import CommonScene from '../CommonScene';
+
+import ProductEditMutation from './mutations/ProductEditMutation';
 
 const HeaderStyled = styled(Header)`
   padding: 5px;
@@ -26,43 +18,39 @@ const HeaderStyled = styled(Header)`
 
 const TOTAL_REFETCH_ITEMS = 10;
 
-const ListProducts = ({ query, relay }) => {
+const InputSearch = ({ search, setSearch }) => (
+  <TextInput
+    key="search"
+    name="search"
+    onChangeText={setSearch}
+    value={search}
+    // autoFocus={true}
+    placeholder="Search"
+  />
+);
+
+const ListProducts = ({ navigation, query, relay }) => {
   const [isFetchingTop, setIsFetchingTop] = useState(false);
   const [isFetchingEnd, setIsFetchingEnd] = useState(false);
   const [search, setSearch] = useState('');
 
-  const handleSearch = () => {
-    const refetchVariables = fragmentVariables => ({
-      ...fragmentVariables,
-      search,
-    });
-    relay.refetch(refetchVariables, null, () => {}, {
-      force: true,
-    });
+  const onCompleted = res => {
+    const response = res && res.ProductEditMutation;
+    Alert.alert('Success', 'Operação realizada com sucesso!');
 
-    setSearch(search);
+    if (response && response.error) {
+      Alert.alert('Erro', 'Falha na operação');
+    }
+    onRefresh();
   };
 
-  const renderHeader = () => (
-    <HeaderStyled searchBar rounded>
-      <Item>
-        <Icon name="ios-search" />
-        <Input
-          key="search"
-          name="search"
-          onChangeText={setSearch}
-          value={search}
-          placeholder="Search"
-        />
-        <Icon name="ios-people" />
-      </Item>
-      <Button transparent onPress={handleSearch}>
-        <Text>Search</Text>
-      </Button>
-    </HeaderStyled>
-  );
+  const onError = () => {
+    Alert.alert('Erro', 'Falha na operação');
+  };
 
   const onRefresh = () => {
+    console.log('======= onRefresh isFetchingTop', isFetchingTop);
+
     if (isFetchingTop) return;
 
     setIsFetchingTop(true);
@@ -82,6 +70,60 @@ const ListProducts = ({ query, relay }) => {
       }
     );
   };
+
+  const swipeOutOptions = node => {
+    return [
+      {
+        onPress: () =>
+          Alert.alert(
+            'Alert',
+            'Are you sure you want to delete?',
+            [
+              { text: 'No', onPress: () => {}, style: 'cancel' },
+              {
+                text: 'Yes',
+                onPress: () => {
+                  const { __typename, ...newNode } = node;
+                  ProductEditMutation.commit(
+                    { active: false, ...newNode },
+                    onCompleted,
+                    onError
+                  );
+                },
+              },
+            ],
+            { cancelable: true }
+          ),
+        text: 'Delete',
+        type: 'delete',
+      },
+    ];
+  };
+
+  const handleSearch = () => {
+    const refetchVariables = fragmentVariables => ({
+      ...fragmentVariables,
+      search,
+    });
+    relay.refetch(refetchVariables, null, () => {}, {
+      force: true,
+    });
+
+    setSearch(search);
+  };
+
+  const renderHeader = () => (
+    <HeaderStyled searchBar rounded>
+      <Item>
+        <Icon name="ios-search" />
+        <InputSearch search={search} setSearch={setSearch} />
+        <Icon name="ios-people" />
+      </Item>
+      <Button transparent onPress={handleSearch}>
+        <Text>Search</Text>
+      </Button>
+    </HeaderStyled>
+  );
 
   const onEndReached = () => {
     if (isFetchingEnd) return;
@@ -118,22 +160,21 @@ const ListProducts = ({ query, relay }) => {
   };
 
   return (
-    <Container>
-      <ContentStyled>
-        {query.products && query.products.edges && (
-          <FlatListCustom
-            onEndReached={onEndReached}
-            onRefresh={onRefresh}
-            refreshing={isFetchingTop}
-            data={query.products.edges}
-            // onItemClick={({ id }) => {
-            //   navigation.navigate('GroupDetails', { id });
-            // }}
-            ListHeaderComponent={renderHeader}
-          />
-        )}
-      </ContentStyled>
-    </Container>
+    <CommonScene navigation={navigation}>
+      {query.products && query.products.edges && (
+        <FlatListCustom
+          onEndReached={onEndReached}
+          onRefresh={onRefresh}
+          refreshing={isFetchingTop}
+          data={query.products.edges}
+          onItemClick={({ id }) => {
+            navigation.navigate('EditProduct', { id });
+          }}
+          ListHeaderComponent={renderHeader}
+          swipeOutOptions={swipeOutOptions}
+        />
+      )}
+    </CommonScene>
   );
 };
 
@@ -156,6 +197,7 @@ const ListProductsRefetchContainer = createRefetchContainer(
             node {
               id
               title
+              description
             }
           }
         }

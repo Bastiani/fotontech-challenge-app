@@ -47,6 +47,7 @@ const FlatListCustom = ({
         onPressItem={() => onPressItem(node)}
         selected={!!selected.get(idx(node, _ => _.id))}
         title={node.title}
+        description={node.description}
         ItemSeparatorComponent={renderSeparator}
         swipeOutOptions={swipeOutOptions && swipeOutOptions(node)}
       >
@@ -58,7 +59,6 @@ const FlatListCustom = ({
   return (
     <StyledFlatList
       data={data}
-      // extraData={this.state}
       keyExtractor={keyExtractor}
       renderItem={renderItem}
       {...props}
