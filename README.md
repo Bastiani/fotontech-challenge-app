@@ -9,3 +9,6 @@
 - release test `react-native run-android --variant=release`
 
 Fix for RNGestureHandler [issue](https://github.com/kmagiera/react-native-gesture-handler/issues/494#issuecomment-509085906)
+
+![](https://github.com/Bastiani/fotontech-challenge-app/blob/master/docs/android.gif)
+![](https://github.com/Bastiani/fotontech-challenge-app/blob/master/docs/ios.gif)
